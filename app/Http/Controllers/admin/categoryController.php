@@ -1,18 +1,30 @@
 <?php
 
 namespace App\Http\Controllers\admin;
-
+use App\Http\Requests\categiryRequest;
 use App\Models\Category;
 use App\Trait\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\apiController;
 use App\Http\Resources\categoryResource;
+use App\Models\Brands;
 
 class categoryController extends apiController
 {
 
     use ApiResponse;
+
+
+    public function getProducts(Category $Category)
+    {
+        
+        return $this->successResponse(
+        new categoryResource(
+         $Category->load('Products')));
+
+    }
+
 
     public function validatecategoryRequest()
     {
@@ -39,17 +51,11 @@ class categoryController extends apiController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request,Category $category)
+    public function store(Request $request,Category $category, categiryRequest $categoryRequest)
     {
         //
 
-        $validate = validator($request->all(),[
-
-            "title" => "required|string|unique:categories,title",
-
-            "parent_id" => "nullable|integer"
-
-        ]);
+        $validate = validator($request->all(),$categoryRequest->rules());
 
         if($validate->fails()){
 
@@ -92,4 +98,8 @@ class categoryController extends apiController
     {
         //
     }
+
+
+  
+
 }

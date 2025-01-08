@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\productResource;
 use App\Models\product;
 use App\Models\Products;
@@ -35,30 +35,13 @@ class ProductController extends apiController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Products $product)
+    public function store(Request $request, 
+    Products $product,
+    ProductRequest $productRequest)
     {
         //
 
-        $validate = validator($request->all(),[
-
-            "brand_id" => "required|integer|exists:brands,id",
-
-            "category_id" => "required|integer|exists:categories,id",
-
-            "name" => "required|unique:products,name",
-
-            "description" => "required",
-
-            "primery_image" => "required|image|mimes:jpg,png,jpeg,svg",
-
-            "quintity" => "required|integer",
-
-            "slug" => "required|unique:products,slug",
-
-            "price" => "required",
-            
-
-        ]);
+        $validate = validator($request->all(),$productRequest->rules());
 
         if($validate->fails())
 
@@ -92,29 +75,11 @@ class ProductController extends apiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Products $product)
+    public function update(Request $request,
+     Products $product,ProductRequest $productRequest)
     {
         //
-        $validate = validator($request->all(),[
-
-            "brand_id" => "required|integer|exists:brands,id",
-
-            "category_id" => "required|integer|exists:categories,id",
-
-            "name" => "required|unique:products,name",
-
-            "description" => "required",
-
-            "primery_image" => "image|mimes:jpg,png,jpeg,svg|nullable",
-
-            "quintity" => "required|integer",
-
-            "slug" => "required",
-
-            "price" => "required",
-            
-
-        ]);
+        $validate = validator($request->all(),$productRequest->rules());
 
         if($validate->fails())
 

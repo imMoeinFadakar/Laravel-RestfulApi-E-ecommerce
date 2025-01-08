@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('galleries', function (Blueprint $table) {
-            $table->id();  
-            $table->unsignedBigInteger('products_id');  
-            $table->string('path');  
-            $table->string('mime');  
-            $table->timestamps();  
+        Schema::create('premissions_roles', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('permissions_id')->constrained();
+            $table->foreignId('rolls_id')->constrained();
+
             $table->softDeletes();
-            $table->foreign('products_id')->references('id')->on('products');  
+            $table->timestamps();
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('galleries');
+        Schema::dropIfExists('premissions_roles');
     }
 };

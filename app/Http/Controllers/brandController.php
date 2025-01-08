@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BrandRequest;
 use App\Http\Resources\apiResource;
+use App\Http\Resources\BrandResources;
 use App\Models\Brands;
+use App\Models\Products;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class brandController extends apiController
-{   
+{
 
 
 
-   
+
     /**
      * Display a listing of the resource.
      */
@@ -24,11 +27,11 @@ class brandController extends apiController
 
         $allposts = Brands::all();
 
-        
+
         return $this->successResponse(
-        
+
         apiResource::collection($allposts),
-    
+
         'all brands');
 
 
@@ -37,40 +40,37 @@ class brandController extends apiController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Brands $brand)
+    public function store(Request $request,
+     Brands $brand, 
+     BrandRequest $brandRequest
+     )
     {
         //
-        
 
-        $validate = validator($request->all(),[
 
-            "title" => "required|alpha",
-
-            "image" => "required|image"
-
-        ]);
+        $validate = validator($request->all(),$brandRequest->rules());
 
         if($validate->fails())
 
             return $this->errorResponse(422,
-        
+
             $validate->getMessageBag(),
-        
+
             'validation filed!');
 
 
-        $imagename = Carbon::now()->microsecond . '.' . $request->image->extension();
+        $imageGalleryname = Carbon::now()->microsecond . '.' . $request->image->extension();
 
 
-        $request->image->storeAs('image/brands',$imagename,'public');
+        $request->image->storeAs('image/brands',$imageGalleryname,'public');
 
 
-        $brand->newBrand($request,$imagename);
+        $brand->newBrand($request,$imageGalleryname);
 
         $lastRecoredOfBrand = $brand->query()->orderBy('id','desc')->first();
 
         return $this->successResponse(
-            
+
             $lastRecoredOfBrand,
             'inserted!'
             );
@@ -94,7 +94,7 @@ class brandController extends apiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id, BrandRequest $brandRequest)
     {
         //
         $Brand = Brands::find($id);
@@ -105,12 +105,7 @@ class brandController extends apiController
 
         }
 
-        $validate = validator($request->all(),[
-
-            'title' => "required|alpha",
-            "image" => "required|image"
-
-        ]);
+        $validate = validator($request->all(),$brandRequest->rules());
 
         if($validate->fails()){
 
@@ -119,7 +114,7 @@ class brandController extends apiController
             'not found!');
 
         }
-        
+
         $Brand->updateBrand($request);
 
 
@@ -130,13 +125,11 @@ class brandController extends apiController
 
         //validation
 
-       
+
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
         //
@@ -155,4 +148,15 @@ class brandController extends apiController
 
 
     }
+
+
+    public function getProducts(Brands $brands)
+    {
+
+        return $this->successResponse(new BrandResources($brands->load('Product'))
+            ,'get Products');
+
+    }
+
+
 }

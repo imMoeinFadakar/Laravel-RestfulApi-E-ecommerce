@@ -11,18 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('rolls', function (Blueprint $table) {
             $table->id();
-            
-            $table->string('title')->unique();
-
-            $table->unsignedBigInteger('parent_id')->nullable();
-
-            $table->foreign('category_id')
-            ->references('id')->on('categories')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
-
+            $table->string('title');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -33,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('rolls');
     }
 };

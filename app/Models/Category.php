@@ -14,6 +14,14 @@ class Category extends Model
     protected $guarded = [];
 
 
+    public function Products()
+    {
+        
+        return $this->hasMany(Products::class);
+
+    }
+
+
     public function parent()
     {
         $this->belongsTo(Category::class,'parent_id');

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('price')->default(0);
-            $table->string('quintity')->default(0);
+            $table->string('quantity')->default(0);
             $table->string('slug')->unique();
-            $table->string('primery_image');
+            $table->string('primary_image');
             $table->softDeletes();
             $table->timestamps();
         });

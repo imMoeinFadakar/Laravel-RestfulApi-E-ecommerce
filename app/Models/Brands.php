@@ -15,8 +15,16 @@ class Brands extends Model
 
     protected $guarded = [];
 
+    public function Product()
+    {
 
+        return $this->hasMany(Products::class);
 
+    }
+
+  
+
+    // end relations
 
     public function newBrand($request, $imageName)
     {
@@ -33,13 +41,13 @@ class Brands extends Model
     public function findSingleBrand($id)
     {
 
-        return $this::all()->where('id',$id)->first(); 
+        return $this::all()->where('id',$id)->first();
 
     }
 
     public function isBrandExist($id)
     {
-        
+
          if($this->find($id)){
 
             return true;
@@ -59,8 +67,8 @@ class Brands extends Model
         $this->image = $request['image'];
         $this->save();
 
-    } 
-    
+    }
+
 
 
 
