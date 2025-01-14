@@ -7,6 +7,7 @@ use App\Models\product;
 use App\Models\Products;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends apiController
 {
@@ -39,7 +40,14 @@ class ProductController extends apiController
     Products $product,
     ProductRequest $productRequest)
     {
-        //
+        // add new products
+
+        // if(Gate::denies('read-products')){
+
+        //     return $this->errorResponse(404,'Gate:you dont have permisssion!');
+
+        // }
+
 
         $validate = validator($request->all(),$productRequest->rules());
 

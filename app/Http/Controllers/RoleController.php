@@ -49,6 +49,17 @@ class RoleController extends apiController
     public function update(Request $request, string $id)
     {
         //
+
+        // $roll = rolls::query()->update([
+
+        //     "title" => $request->title,
+
+        // ]);
+
+        // $roll->permissions()->sync($request->permissions);
+
+        // return $this->successResponse($roll->title,'Role updated succesfully!');
+
     }
 
     /**

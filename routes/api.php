@@ -1,20 +1,22 @@
 <?php
 
-use App\Http\Controllers\admin\categoryController;
-use App\Http\Controllers\authController;
-use App\Http\Controllers\permissionController;
-use App\Http\Controllers\permissionsController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\brandController;
-use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\RollController;
-use App\Http\Controllers\UsersController;
-use App\Http\Middleware\checkPermission;
 use App\Models\admin\product;
 use Database\Seeders\rolesSeeders;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RollController;
+use App\Http\Middleware\checkPermission;
+use App\Http\Controllers\brandController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\permissionController;
+use App\Http\Controllers\permissionsController;
+use App\Http\Controllers\admin\categoryController;
+use App\Http\Controllers\orderController;
+use App\Http\Controllers\paymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,10 +34,29 @@ use Database\Seeders\rolesSeeders;
 // });
 
 
+     
+/**
+ * login and registration routes:
+ */
+Route::post('register',[AuthController::class , 'Register']);
+
+Route::post('login',[AuthController::class , 'Login']);
+
+Route::post('payment/store',[paymentController::class , 'store'])
+->middleware('auth:sanctum');
+
+Route::post('payment/verify',[paymentController::class , 'verify']);
+
+
+Route::post('logout',[AuthController::class , 'Logout'])
+->middleware('auth:sanctum');
 
 
 
-
+/**
+ * admin routes
+ */
+Route::prefix('admin')->middleware('auth:sanctum')->group(function(){
 
 
     Route::apiResource('brand', brandController::class);
@@ -54,5 +75,19 @@ use Database\Seeders\rolesSeeders;
     Route::apiResource('product.gallery',GalleryController::class);
 
     Route::apiResource('role',RoleController::class);
+
+});
+
+
+Route::prefix('user')->middleware('auth:sanctum')->group(function(){
+
+
+
+});
+
+
+
+
+
 
 

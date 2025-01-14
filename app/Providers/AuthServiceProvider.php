@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use App\Models\permissions;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -22,5 +25,33 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+
+
+        // Gate::define('view-dashboard',function(){
+        // });
+
+        //Handle Permissions
+        
+        foreach($this->getPermissions() as $permissions){
+
+            Gate::define($permissions->title,function($user) use ($permissions) {
+
+
+                return $user->role->hasPermission($permissions->title);
+
+            });
+            
+        }
+
+      
+
     }
+
+    public function getPermissions()
+    {
+        
+        return permissions::with('roles')->get();
+
+    }
+
 }

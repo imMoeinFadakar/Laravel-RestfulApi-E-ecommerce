@@ -14,6 +14,11 @@ class permissions extends Model
 
     // Relations
 
+    public function roles()
+    {
+       return  $this->belongsToMany(rolls::class);
+    }
+
 
     public function permissionRoles()
     {

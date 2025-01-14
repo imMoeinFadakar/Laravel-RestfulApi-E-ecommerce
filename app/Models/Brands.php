@@ -22,9 +22,7 @@ class Brands extends Model
 
     }
 
-  
-
-    // end relations
+    // end Relations
 
     public function newBrand($request, $imageName)
     {

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/payment/verify', function (Request $request) {
+
+    $response = Http::post('http://127.0.0.1:8000/payment/verify',[
+
+        "token" => $request->token
+
+    ]);
+
+
+    dd($response->json());
+
 });
